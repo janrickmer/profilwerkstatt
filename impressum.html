@@ -44,7 +44,7 @@ li{margin:4px 0}
 <ul class="kurz">
 <li>Deine Eingaben speichert die Profilwerkstatt nur im Speicher deines Browsers auf diesem Gerät. Mit „Meine Daten von diesem Gerät löschen“ entfernst du sie wieder.</li>
 <li>Dein Profil speicherst du selbst als PDF-Datei.</li>
-<li>Der KI-Berufsberater ist derzeit abgeschaltet; es werden keine Eingaben an einen KI-Dienst übertragen.</li>
+<li>Den KI-Berufsberater nutzt du freiwillig. Erst wenn du eine Nachricht abschickst, gehen sie und dein Kurzprofil – ohne deinen Namen – über einen Dienst des Betreibers an Cloudflare Workers AI (Abschnitt 5).</li>
 <li>Es gibt keine Cookies, keine Analyse-Werkzeuge und keine Werbung.</li>
 </ul>
 <h3>1. Verantwortlicher</h3>
@@ -66,19 +66,51 @@ GitHub die Daten speichert, steht in der
 Selbsteinschätzung, die Einschätzungen anderer (Fremdbild) mit ihren Anmerkungen, die Antworten im Interessencheck, deine
 Berufswahl und Angaben zum Praktikum ein. Die Berufsvorschläge berechnet die Seite in deinem Browser aus deinen Antworten;
 sie sind Anregungen, keine Entscheidung.</p>
-<p>Damit du später weitermachen kannst, speichert die Seite deine Eingaben (und, falls du den früheren KI-Berater genutzt hast, dessen Chatverlauf)
+<p>Damit du später weitermachen kannst, speichert die Seite deine Eingaben und den Verlauf des KI-Chats
 im lokalen Speicher deines Browsers (localStorage, Eintrag „profilwerkstatt-v1“). Sie bleiben dort, bis du am Ende auf
 „Meine Daten von diesem Gerät löschen“ klickst oder die Website-Daten in deinem Browser löschst; danach legt die Seite beim
 nächsten Aufruf nur einen leeren Eintrag ohne deine Angaben an. An einem Schulrechner oder fremden Gerät lösche deine Daten
-bitte am Ende. Diese Daten verlassen dein Gerät nicht; der Betreiber erhält sie nicht. Die Speicherung ist für die von dir gewünschte Funktion erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG).</p>
+bitte am Ende. Diese Daten verlassen dein Gerät nicht – mit einer Ausnahme: Nutzt du den KI-Berufsberater, gehen die in Abschnitt 5 genannten Angaben an den KI-Dienst. Die Speicherung ist für die von dir gewünschte Funktion erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG).</p>
 <h3>4. PDF-Dateien</h3>
 <p>Dein Profil und den Fragebogen zur Fremdwahrnehmung erzeugt dein Browser als PDF-Dateien direkt auf deinem Gerät. Das
 Profil-PDF enthält deinen vollen Namen, deine Klasse, das Datum und deine Eingaben einschließlich der Einschätzungen und
 Anmerkungen der befragten Personen, aber nicht den KI-Chat. Der Fragebogen enthält deinen Namen; beide Dateinamen enthalten
 ihn ebenfalls. Was du mit den Dateien machst – zum Beispiel ausdrucken, verschicken oder deiner Lehrkraft geben –,
 entscheidest du; verschickst du den Fragebogen über einen Messenger, gelten dessen Datenschutzbedingungen.</p>
-<h3>5. KI-Berufsberater</h3>
-<p>Ein KI-Berufsberater wird derzeit nicht angeboten. Es werden keine Daten an einen KI-Dienst übermittelt.</p>
+<h3>5. KI-Berufsberater (Cloudflare Workers AI)</h3>
+<p>In Schritt 5c kannst du freiwillig mit einem KI-Berufsberater sprechen. Vor der ersten Nachricht bestätigst du mit einem
+Kästchen, dass du mindestens 16 Jahre alt bist oder deine Eltern einverstanden sind und dass du den Hinweis gelesen hast.
+Erst wenn du eine Nachricht abschickst, sendet dein Browser an den Dienst des Betreibers:</p>
+<ul>
+<li>deine Nachricht und die letzten Nachrichten des Gesprächs (höchstens 16),</li>
+<li>ein Kurzprofil aus der Seite: Schwerpunkt und Punkte im Interessencheck, die vorgeschlagenen Berufe, deine wichtigsten
+Werte, deine Stärken laut Selbst- und Fremdeinschätzung und was du gern tust.</li>
+</ul>
+<p>Deinen Namen, deine Klasse, die Anmerkungen der befragten Personen und deine Angaben zum Praktikum sendet die Seite nicht.
+Schreib in deine Nachrichten bitte keine Namen oder anderen privaten Angaben (zum Beispiel Adresse, Gesundheit,
+Religion).</p>
+<p>Der Dienst ist ein Cloudflare Worker des Betreibers („profilwerkstatt-berater“ auf workers.dev). Er prüft und kürzt die
+Anfrage und lässt die Antwort vom Sprachmodell „Mistral Small 3.1“ (Mistral AI, Open-Source-Lizenz Apache 2.0) erzeugen,
+das Cloudflare im Rahmen von Workers AI betreibt. Anbieter ist die Cloudflare, Inc., 101 Townsend Street, San Francisco,
+CA 94107, USA; Cloudflare verarbeitet die Daten im Auftrag des Betreibers. Nach eigenen Angaben nutzt Cloudflare Eingaben
+und Antworten bei Workers AI weder zum Training von KI-Modellen noch zur Verbesserung eigener oder fremder Dienste
+(<a href="https://developers.cloudflare.com/workers-ai/platform/data-usage/" rel="noopener">Cloudflare: Your Data and
+Workers AI</a>). Der Dienst des Betreibers speichert deine Nachrichten nicht und schreibt sie nicht in Protokolle. Um
+Massenanfragen zu bremsen, hält er die IP-Adressen der Anfragen mit ihrem Zeitpunkt im Arbeitsspeicher; diese Liste wird
+geleert, wenn sie sehr lang wird oder der Dienst neu startet. Technisch bedingt verarbeitet Cloudflare deine IP-Adresse und
+den Zeitpunkt der Anfrage. Die Verarbeitung kann auch außerhalb der EU stattfinden, etwa in den USA; Cloudflare, Inc. ist
+nach dem EU-U.S. Data Privacy Framework zertifiziert (Angemessenheitsbeschluss vom 10. Juli 2023, Art. 45 DSGVO).
+Einzelheiten: <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Datenschutzerklärung von Cloudflare</a>.</p>
+<p>Die Antworten erzeugt eine KI. Sie können falsch oder unvollständig sein; prüfe Berufe deshalb selbst, zum Beispiel in
+BERUFENET (Schritt b). Der Berater ist angewiesen, nur über Berufswahl, Praktikum und Bewerbung zu sprechen, nicht nach
+persönlichen Daten zu fragen und bei Sorgen auf Vertrauenspersonen und Beratungsangebote wie die Nummer gegen Kummer
+hinzuweisen. Eine automatisierte Entscheidung über dich (Art. 22 DSGVO) findet nicht statt; der Chat kommt nicht in das
+Profil-PDF.</p>
+<p>Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die du mit dem Kästchen und dem Abschicken einer
+Nachricht erteilst; bist du jünger als 16 Jahre, brauchst du dafür das Einverständnis deiner Eltern (Art. 8 DSGVO). Die
+Nutzung ist freiwillig: Alle anderen Schritte funktionieren genauso ohne den Berater. Du kannst die Einwilligung jederzeit
+für die Zukunft widerrufen, indem du das Häkchen entfernst und keine weiteren Nachrichten schickst. Den Gesprächsverlauf
+auf deinem Gerät löschst du mit „Meine Daten von diesem Gerät löschen“.</p>
 <h3>6. Einsatz im Unterricht</h3>
 <p>Deine Dateien liegen auf deinem Gerät; was damit geschieht, bestimmst du. Setzt deine Lehrkraft die Profilwerkstatt im Unterricht
 ein und gibst du die Dateien wie vorgesehen ab, zum Beispiel in Moodle, ist für die weitere Verarbeitung und die Bewertung
@@ -96,6 +128,8 @@ Tab; dort gelten die Datenschutzhinweise der Bundesagentur für Arbeit.</p>
 <li>falsche Daten berichtigen zu lassen (Art. 16 DSGVO),</li>
 <li>die Löschung deiner Daten zu verlangen (Art. 17 DSGVO),</li>
 <li>die Einschränkung der Verarbeitung zu verlangen (Art. 18 DSGVO),</li>
+<li>deine Daten in einem gängigen Format zu erhalten, soweit die Verarbeitung auf deiner Einwilligung beruht (Art. 20 DSGVO),</li>
+<li>eine Einwilligung jederzeit mit Wirkung für die Zukunft zu widerrufen (Art. 7 Abs. 3 DSGVO); was vor dem Widerruf geschehen ist, bleibt rechtmäßig,</li>
 <li>dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren (Art. 77 DSGVO). Für den Betreiber zuständig ist
 der Hessische Beauftragte für Datenschutz und Informationsfreiheit, Gustav-Stresemann-Ring 1, 65189 Wiesbaden,
 <a href="https://datenschutz.hessen.de" rel="noopener">datenschutz.hessen.de</a>.</li>

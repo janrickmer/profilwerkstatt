@@ -1,0 +1,18 @@
+# Optional: Veröffentlichung per Kommandozeile (npx wrangler deploy im Ordner worker/).
+# Die Einrichtung über das Cloudflare-Dashboard ist in worker/ANLEITUNG.md beschrieben.
+name = "profilwerkstatt-berater"
+main = "ki-berater.js"
+compatibility_date = "2026-08-01"
+workers_dev = true
+
+# Zugriff auf Workers AI (Sprachmodell)
+[ai]
+binding = "AI"
+
+# Keine Protokolle mit Inhalten: Workers Logs bleiben aus.
+[observability]
+enabled = false
+
+# Weitere erlaubte Web-Adressen (z. B. zum Testen), durch Kommas getrennt:
+# [vars]
+# ALLOWED_ORIGINS = "http://localhost:8080"

@@ -4,16 +4,20 @@ Eine Website zur Berufsorientierung vor dem Betriebspraktikum im Januar. Schüle
 
 ## Eigenschaften
 
-- Eine einzige Datei (`index.html`), komplett eigenständig – keine externen Server, Fonts oder Skripte
+- Eine einzige Datei (`index.html`), komplett eigenständig – keine externen Fonts oder Skripte; nur der freiwillige
+  KI-Berater nutzt einen Dienst (siehe unten)
 - Alle Eingaben bleiben lokal im Browser des jeweiligen Geräts (automatisches Zwischenspeichern, Lösch-Knopf für Schulrechner)
 - PDF-Export des Profils sowie ein druck- und verschickbarer Fremdwahrnehmungs-Fragebogen als PDF
-- KI-Berufsberater derzeit abgeschaltet: Die Bedingungen der Gemini API erlauben keinen Einsatz in Angeboten, die von unter
-  18-Jährigen genutzt werden. Ein Ersatz mit passenden Bedingungen ist in Vorbereitung.
+- Freiwilliger KI-Berufsberater (Schritt 5c) über einen Cloudflare Worker mit Workers AI (Sprachmodell Mistral Small 3.1):
+  Er erhält nur die Nachrichten und ein Kurzprofil ohne Namen, erst nach einem Einverständnis-Kästchen (ab 16 Jahren oder
+  mit Einverständnis der Eltern). Quelltext und Einrichtung: `worker/` und **worker/ANLEITUNG.md**. Der frühere Berater
+  mit der Gemini API ist abgeschaltet, weil deren Bedingungen keinen Einsatz bei unter 18-Jährigen erlauben.
 - Verifizierte Links zu Check-U und BERUFENET der Bundesagentur für Arbeit
 
 ## Installation
 
-Schritt-für-Schritt-Anleitung (GitHub Pages, Strato-Subdomain, optionaler KI-Chat): siehe **INSTALLATION.md**.
+Schritt-für-Schritt-Anleitung (GitHub Pages, Strato-Subdomain): siehe **INSTALLATION.md**. Den KI-Berater richten Sie
+nach **worker/ANLEITUNG.md** ein.
 
 ## Lizenzen eingebetteter Komponenten
 
