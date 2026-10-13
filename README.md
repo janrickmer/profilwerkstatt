@@ -7,7 +7,8 @@ Eine Website zur Berufsorientierung vor dem Betriebspraktikum im Januar. Schüle
 - Eine einzige Datei (`index.html`), komplett eigenständig – keine externen Server, Fonts oder Skripte
 - Alle Eingaben bleiben lokal im Browser des jeweiligen Geräts (automatisches Zwischenspeichern, Lösch-Knopf für Schulrechner)
 - PDF-Export des Profils sowie ein druck- und verschickbarer Fremdwahrnehmungs-Fragebogen als PDF
-- Optionaler KI-Berufsberater (Google Gemini, Gratis-Tarif) über einen Cloudflare Worker – Einrichtung siehe `INSTALLATION.md`
+- KI-Berufsberater derzeit abgeschaltet: Die Bedingungen der Gemini API erlauben keinen Einsatz in Angeboten, die von unter
+  18-Jährigen genutzt werden. Ein Ersatz mit passenden Bedingungen ist in Vorbereitung.
 - Verifizierte Links zu Check-U und BERUFENET der Bundesagentur für Arbeit
 
 ## Installation

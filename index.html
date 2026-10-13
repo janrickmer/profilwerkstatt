@@ -354,7 +354,7 @@ details[open]{padding-bottom:12px}
       <button class="btn" id="chatSend">Senden</button>
     </div>
     <p class="mut" id="chatHint" style="font-size:13px;margin:10px 0 0">Der Berater ist eine KI (Google Gemini, kostenloser Dienst). Deine Nachrichten und dein Kurzprofil (Vorname, Interessen, Stärken) werden zur Beantwortung an Google übermittelt; im kostenlosen Tarif kann Google Eingaben zur Verbesserung seiner Dienste nutzen. Schreib deshalb keine privaten Dinge wie Nachnamen, Adresse oder Gesundheit. Eine KI kann sich irren: Prüfe Berufe anschließend selbst (Schritt b).</p>
-    <div class="note" id="chatOff" style="display:none;--ac:var(--c5)"><b>Der KI-Berater ist gerade nicht verfügbar.</b> Kein Problem – mach einfach mit d) weiter. <span class="mut">(Hinweis für die Lehrkraft: Worker-Adresse als KI_ENDPOINT im Quellcode dieser Datei eintragen, siehe Anleitung.)</span></div>
+    <div class="note" id="chatOff" style="display:none;--ac:var(--c5)"><b>Der KI-Berater ist derzeit nicht verfügbar.</b> Kein Problem – mach einfach mit d) weiter.</div>
   </div>
 
   <h2><span class="no">d</span>Deine engere Wahl</h2>
@@ -787,7 +787,8 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
    Leer lassen = der Chat-Schritt zeigt einen Hinweis und
    bleibt inaktiv; alles andere funktioniert normal.
    ============================================================ */
-var KI_ENDPOINT = 'https://profilwerkstatt-ki.feindt-cloudflare.workers.dev/';
+// Abgeschaltet: Die Bedingungen der Gemini API erlauben keinen Einsatz in Angeboten, die von unter 18-Jährigen genutzt werden.
+var KI_ENDPOINT = '';
 
 /* ---------- Daten ---------- */
 var LIKES = ['mit Menschen arbeiten','anderen etwas erklären','mit Kindern zu tun haben','draußen aktiv sein','mit den Händen arbeiten','Technik verstehen & reparieren','am Computer arbeiten','forschen & experimentieren','mit Zahlen umgehen','Texte schreiben','gestalten & kreativ sein','Musik machen / auf der Bühne stehen','fotografieren & filmen','organisieren & planen','diskutieren & überzeugen','verkaufen & verhandeln','Verantwortung übernehmen','Sport & Bewegung','mit Tieren & Natur arbeiten','Sprachen sprechen'];
