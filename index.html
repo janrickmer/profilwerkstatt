@@ -195,9 +195,12 @@ details[open]{padding-bottom:12px}
 @media (prefers-reduced-motion:reduce){.msg.typing{animation:none}}
 .chatrow{display:flex;gap:8px;margin-top:12px;align-items:flex-end}
 .chatrow textarea{flex:1;min-height:50px;max-height:130px;margin:0}
+.kiok{display:flex;gap:10px;align-items:flex-start;margin:12px 0 0;font-size:14.5px;line-height:1.45;cursor:pointer}
+.kiok input{flex:none;width:19px;height:19px;margin:2px 0 0;accent-color:var(--c5);cursor:pointer}
 
 /* ===== Fußzeile ===== */
 .made{text-align:center;font-size:12.5px;color:#9aa1ad;margin:60px 0 0;letter-spacing:.03em}
+.made a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 </style>
 </head>
 <body>
@@ -348,12 +351,13 @@ details[open]{padding-bottom:12px}
   <p class="mut">Sprich mit dem Berater über deine Berufsvorschläge aus Schritt 4: Sag ihm ehrlich, was dich an einem Vorschlag stört oder was dir fehlt – er sucht dann mit dir nach Berufen, die besser passen und sich gut im Praktikum erkunden lassen.</p>
   <div class="card ac">
     <div class="chatbox" id="chatBox" aria-live="polite"></div>
+    <label class="kiok" id="chatOkRow"><input type="checkbox" id="chatOk"> <span>Ich bin mindestens 16 Jahre alt oder meine Eltern sind einverstanden, dass ich den KI-Berater nutze. Den Hinweis unten habe ich gelesen.</span></label>
     <div class="chatrow" id="chatRow">
-      <textarea id="chatIn" placeholder="Deine Nachricht … (Enter = senden)" aria-label="Nachricht an den KI-Berater"></textarea>
+      <textarea id="chatIn" maxlength="1500" placeholder="Deine Nachricht … (Enter = senden)" aria-label="Nachricht an den KI-Berater"></textarea>
       <button class="btn" id="chatSend">Senden</button>
     </div>
-    <p class="mut" id="chatHint" style="font-size:13px;margin:10px 0 0">Der Berater ist eine KI (Google Gemini, kostenloser Dienst). Deine Nachrichten und dein Kurzprofil (Vorname, Interessen, Stärken) werden zur Beantwortung an Google übermittelt; im kostenlosen Tarif kann Google Eingaben zur Verbesserung seiner Dienste nutzen. Schreib deshalb keine privaten Dinge wie Nachnamen, Adresse oder Gesundheit. Eine KI kann sich irren: Prüfe Berufe anschließend selbst (Schritt b).</p>
-    <div class="note" id="chatOff" style="display:none;--ac:var(--c5)"><b>Der KI-Berater ist gerade nicht verfügbar.</b> Kein Problem – mach einfach mit d) weiter. <span class="mut">(Hinweis für die Lehrkraft: Worker-Adresse als KI_ENDPOINT im Quellcode dieser Datei eintragen, siehe Anleitung.)</span></div>
+    <p class="mut" id="chatHint" style="font-size:13px;margin:10px 0 0">Der Berater ist eine KI (Sprachmodell „Mistral Small 3.1“ bei Cloudflare Workers AI). Erst wenn du eine Nachricht abschickst, gehen sie und dein Kurzprofil (Interessen, Werte, Stärken und Berufsvorschläge – ohne deinen Namen) über einen Dienst des Betreibers an Cloudflare; Cloudflare nutzt sie nach eigenen Angaben nicht zum Training von KI-Modellen. Schreib keine privaten Dinge wie Namen, Adresse oder Gesundheit. Eine KI kann sich irren: Prüfe Berufe anschließend selbst (Schritt b). Mehr dazu unter <a href="impressum.html" target="_blank" rel="noopener">Impressum &amp; Datenschutz</a>.</p>
+    <div class="note" id="chatOff" style="display:none;--ac:var(--c5)"><b>Der KI-Berater ist derzeit nicht verfügbar.</b> Kein Problem – mach einfach mit d) weiter.</div>
   </div>
 
   <h2><span class="no">d</span>Deine engere Wahl</h2>
@@ -385,7 +389,7 @@ details[open]{padding-bottom:12px}
   <p><button class="btn sec danger" id="btnWipe">Meine Daten von diesem Gerät löschen</button></p>
 </section>
 
-<footer class="made">made by Jan-Rickmer Feindt</footer>
+<footer class="made">made by Jan-Rickmer Feindt · <a href="impressum.html" target="_blank" rel="noopener">Impressum &amp; Datenschutz</a></footer>
 </main>
 
 <nav class="navi hide" id="navi">
@@ -780,13 +784,14 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
 /* ============================================================
    KONFIGURATION (für die Lehrkraft)
    ------------------------------------------------------------
-   Adresse des KI-Vermittlers (Cloudflare Worker), z. B.
-   'https://profilwerkstatt-ki.NAME.workers.dev'
-   Einrichtung: siehe INSTALLATION.md.
+   Adresse des KI-Beraters (Cloudflare Worker mit Workers AI,
+   Quelltext in worker/), z. B.
+   'https://profilwerkstatt-berater.NAME.workers.dev/'
+   Einrichtung: siehe worker/ANLEITUNG.md.
    Leer lassen = der Chat-Schritt zeigt einen Hinweis und
    bleibt inaktiv; alles andere funktioniert normal.
    ============================================================ */
-var KI_ENDPOINT = 'https://profilwerkstatt-ki.feindt-cloudflare.workers.dev/';
+var KI_ENDPOINT = 'https://profilwerkstatt-berater.feindt-cloudflare.workers.dev/';
 
 /* ---------- Daten ---------- */
 var LIKES = ['mit Menschen arbeiten','anderen etwas erklären','mit Kindern zu tun haben','draußen aktiv sein','mit den Händen arbeiten','Technik verstehen & reparieren','am Computer arbeiten','forschen & experimentieren','mit Zahlen umgehen','Texte schreiben','gestalten & kreativ sein','Musik machen / auf der Bühne stehen','fotografieren & filmen','organisieren & planen','diskutieren & überzeugen','verkaufen & verhandeln','Verantwortung übernehmen','Sport & Bewegung','mit Tieren & Natur arbeiten','Sprachen sprechen'];
@@ -872,7 +877,7 @@ function freshState(){
     self:{}, gut:'', schwer:'', stolz:'', pers:[],
     ri: new Array(RITEMS.length).fill(0),
     wahl:[{b:'',w:''},{b:'',w:''},{b:'',w:''}],
-    pBeruf:'', pWo:'', f1:'', f2:'', f3:'', chat:[] };
+    pBeruf:'', pWo:'', f1:'', f2:'', f3:'', chat:[], kiOk:false, kiV:0 };
 }
 var state = freshState();
 var saveTimer = null;
@@ -1292,9 +1297,8 @@ function goto(n){
 
 /* ---------- KI-Berater (Schritt 5c) ---------- */
 function chatProfile(){
+  // Ohne Namen: Der Berater erhält nur das Kurzprofil aus Interessencheck, Werten und Stärken.
   var p = {};
-  var vor = (state.name||'').trim().split(' ')[0];
-  if (vor) p.vorname = vor;
   if (riDoneCount(state) === RITEMS.length){
     var sc = riScores(state), top = riTop2(state);
     p.schwerpunkt = RTYPES[top[0]].name+' + '+RTYPES[top[1]].name;
@@ -1320,8 +1324,8 @@ function chatProfile(){
   return p;
 }
 function greetingText(){
-  var vor = (state.name||'').trim().split(' ')[0];
-  var hallo = 'Hallo'+(vor ? ' '+vor : '')+'! ';
+  // Ohne Namen – die Begrüßung geht als Teil des Verlaufs an den Berater.
+  var hallo = 'Hallo! ';
   if (riDoneCount(state) === RITEMS.length){
     var top = riTop2(state);
     return hallo+'Dein Interessencheck zeigt als Schwerpunkt „'+RTYPES[top[0]].name+' + '+RTYPES[top[1]].name+'“. Dazu habe ich dir diese Berufe vorgeschlagen: '+jobsFor(top[0],top[1]).join(', ')+'.\n\nWie klingen die für dich? Wenn dich einer der Vorschläge stört oder dir etwas fehlt – zum Beispiel „zu viel Schreibtisch“, „lieber ohne Studium“ oder „mehr mit Menschen“ – dann schreib mir deine Einwände. Ich suche dann mit dir nach Berufen, die besser passen und die du im Januar gut erkunden kannst.';
@@ -1330,6 +1334,8 @@ function greetingText(){
 }
 function ensureGreeting(){
   if (!KI_ENDPOINT) return;
+  // Verläufe des früheren Beraters (mit Vornamen in der Begrüßung) nicht an den neuen Dienst schicken
+  if (state.kiV !== 2){ state.chat = []; state.kiV = 2; save(); }
   if (state.chat.length === 0){
     state.chat.push({r:'a', t:greetingText()}); save();
   } else if (state.chat.length === 1 && state.chat[0].r === 'a'){
@@ -1348,6 +1354,9 @@ function renderChat(){
   if (!box) return;
   var off = !KI_ENDPOINT;
   $('chatOff').style.display = off ? 'block' : 'none';
+  $('chatOkRow').style.display = off ? 'none' : 'flex';
+  $('chatOk').checked = !!state.kiOk;
+  updateChatInput();
   $('chatRow').style.display = off ? 'none' : 'flex';
   $('chatHint').style.display = off ? 'none' : 'block';
   box.style.display = off ? 'none' : 'flex';
@@ -1355,8 +1364,15 @@ function renderChat(){
   state.chat.forEach(function(m){ addBubble(m.r==='u' ? 'user' : 'bot', m.t); });
 }
 var chatBusy = false;
+/* Senden erst nach dem Einverständnis (Alter bzw. Eltern, Hinweis gelesen) */
+function updateChatInput(){
+  var ok = !!state.kiOk;
+  $('chatIn').disabled = !ok || chatBusy;
+  $('chatSend').disabled = !ok || chatBusy;
+  $('chatIn').placeholder = ok ? 'Deine Nachricht … (Enter = senden)' : 'Bitte zuerst oben ankreuzen.';
+}
 function sendChat(){
-  if (chatBusy || !KI_ENDPOINT) return;
+  if (chatBusy || !KI_ENDPOINT || !state.kiOk) return;
   var inp = $('chatIn');
   var text = inp.value.trim();
   if (!text) return;
@@ -1373,7 +1389,10 @@ function sendChat(){
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
       profil: chatProfile(),
-      messages: state.chat.map(function(m){ return {role: m.r==='u' ? 'user' : 'assistant', content: m.t}; })
+      // nur die letzten 16 Nachrichten, gekürzt wie im Worker (worker/ki-berater.js)
+      messages: state.chat.slice(-16).map(function(m){
+        return {role: m.r==='u' ? 'user' : 'assistant', content: String(m.t).slice(0, m.r==='u' ? 1500 : 2500)};
+      })
     }),
     signal: ctrl ? ctrl.signal : undefined
   }).then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
@@ -1388,13 +1407,13 @@ function sendChat(){
     })
     .catch(function(){
       typing.remove();
-      addBubble('err', 'Keine Verbindung zum Berater. Prüfe dein Internet und versuch es gleich noch einmal.');
+      addBubble('err', 'Der KI-Berater ist gerade nicht erreichbar. Prüfe deine Internetverbindung und versuch es später noch einmal – oder mach einfach mit d) weiter.');
     })
     .then(function(){
       if (timer) clearTimeout(timer);
       chatBusy = false;
-      inp.disabled = false; $('chatSend').disabled = false;
-      inp.focus();
+      updateChatInput();
+      if (state.kiOk) inp.focus();
     });
 }
 
@@ -1728,6 +1747,9 @@ function init(){
 
   $('btnPdf').addEventListener('click', downloadPdf);
   $('chatSend').addEventListener('click', sendChat);
+  $('chatOk').addEventListener('change', function(){
+    state.kiOk = this.checked; save(); updateChatInput();
+  });
   $('chatIn').addEventListener('keydown', function(e){
     if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); }
   });
