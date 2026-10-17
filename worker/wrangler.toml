@@ -9,8 +9,14 @@ workers_dev = true
 [ai]
 binding = "AI"
 
-# Keine Protokolle mit Inhalten: Workers Logs bleiben aus.
+# Keine Protokolle: Workers Logs (bei neuen Workern sonst eingeschaltet), Traces und Issues bleiben aus.
 [observability]
+enabled = false
+
+[observability.traces]
+enabled = false
+
+[observability.issues]
 enabled = false
 
 # Weitere erlaubte Web-Adressen (z. B. zum Testen), durch Kommas getrennt:

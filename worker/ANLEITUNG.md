@@ -82,11 +82,21 @@ alte Worker lag. Dann stimmt die Adresse in `index.html` schon (`https://profilw
 3. Variablenname („Variable name“): **`AI`** – genau so, in Großbuchstaben.
 4. Speichern bzw. „Deploy“.
 
-### Schritt 4: Protokolle ausgeschaltet lassen
+### Schritt 4 (empfohlen): Protokolle ausschalten
 
-Öffnen Sie „Settings“ → „Observability“ und prüfen Sie, dass **„Workers Logs“** und – sofern angezeigt – **„Traces“** ausgeschaltet sind
-(„Disabled“). Logpush und „AI Gateway“ werden nicht gebraucht. Der Worker schreibt ohnehin keine Inhalte in
-Protokolle, nur bei Störungen die Fehlermeldung von Workers AI.
+Bei neuen Workern sind die **Workers Logs** standardmäßig eingeschaltet. Chat-Inhalte landen darin nicht – der
+Worker schreibt nur bei Störungen die Fehlermeldung von Workers AI in das Protokoll, und der Inhalt einer Anfrage
+wird von Cloudflare nicht mitgeschrieben. Die Logs halten aber zu jeder Anfrage Metadaten (Zeitpunkt, aufgerufene
+Adresse, Status) bis zu sieben Tage fest. Datensparsamer ist es ohne:
+
+1. Öffnen Sie den Worker und dort den Reiter „Settings“. Scrollen Sie bis zum Abschnitt **„Observability“** (er
+   steht unterhalb von „Bindings“ und „Variables and Secrets“).
+2. Stellen Sie **„Workers Logs“** auf „Disabled“ (Knopf „Edit“ bzw. Schalter). Falls dort auch „Traces“ oder
+   „Issues“ angeboten werden: ebenfalls ausschalten. Logpush und „AI Gateway“ werden nicht gebraucht.
+
+Finden Sie die Einstellung nicht, ist das kein Sicherheitsproblem – die Datenschutzerklärung nennt die Verarbeitung
+von IP-Adresse und Zeitpunkt durch Cloudflare bereits. Alternativ schaltet `npx wrangler deploy` (siehe unten) die
+Logs über die Datei `wrangler.toml` aus.
 
 ### Schritt 5: Testen
 
